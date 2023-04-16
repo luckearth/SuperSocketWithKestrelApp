@@ -11,7 +11,12 @@ public interface IKestrelPipeChannel
     ValueTask WaitHandleClosingAsync();
 }
 
-public sealed class KestrelPipeChannel<TPackageInfo> : ChannelBase<TPackageInfo>, IChannel<TPackageInfo>, IChannel, IPipeChannel, IKestrelPipeChannel
+public sealed class KestrelPipeChannel<TPackageInfo> : 
+    ChannelBase<TPackageInfo>, 
+    IChannel<TPackageInfo>, 
+    IChannel, 
+    IPipeChannel, 
+    IKestrelPipeChannel
 {
     private Task _readsTask;
     private IPipelineFilter<TPackageInfo> _pipelineFilter;
@@ -138,7 +143,7 @@ public sealed class KestrelPipeChannel<TPackageInfo> : ChannelBase<TPackageInfo>
     {
         try
         {
-            await _readsTask;
+            await _readsTask.ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -211,9 +216,7 @@ public sealed class KestrelPipeChannel<TPackageInfo> : ChannelBase<TPackageInfo>
             }
             catch (Exception e)
             {
-                if (!IsIgnorableException(e))
-                    OnError("Failed to read from the pipe", e);
-
+                OnError("Failed to read from the pipe", e);
                 break;
             }
 

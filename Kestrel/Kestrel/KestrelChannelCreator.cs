@@ -8,23 +8,20 @@ public sealed class KestrelChannelCreator : ConnectionHandler, IChannelCreator
 {
     private readonly ILogger<KestrelChannelCreator> _logger;
 
-    public ListenOptions Options { get; }
+    public ListenOptions Options => throw new NotImplementedException();
 
     public bool IsRunning { get; private set; }
 
     public event NewClientAcceptHandler NewClientAccepted;
 
-    public Func<ConnectionContext, ValueTask<IChannel>> ChannelFactory;
+    public Func<ConnectionContext, ValueTask<IChannel>> ChannelFactoryAsync;
 
     public KestrelChannelCreator(ILogger<KestrelChannelCreator> logger)
     {
         _logger = logger;
     }
 
-    async Task<IChannel> IChannelCreator.CreateChannel(object connection)
-    {
-        return await ChannelFactory((ConnectionContext)connection);
-    }
+    Task<IChannel> IChannelCreator.CreateChannel(object connection) => throw new NotImplementedException();
 
     bool IChannelCreator.Start()
     {
@@ -49,7 +46,7 @@ public sealed class KestrelChannelCreator : ConnectionHandler, IChannelCreator
 
         try
         {
-            channel = await ChannelFactory(connection);
+            channel = await ChannelFactoryAsync(connection);
         }
         catch (Exception e)
         {

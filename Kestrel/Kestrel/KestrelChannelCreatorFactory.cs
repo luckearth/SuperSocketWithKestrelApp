@@ -21,7 +21,7 @@ public sealed class KestrelChannelCreatorFactory : IChannelCreatorFactory
 
         var channelFactoryLogger = loggerFactory.CreateLogger(nameof(TcpChannelCreator));
 
-        _creator.ChannelFactory = (context) =>
+        _creator.ChannelFactoryAsync = (context) =>
         {
             var filter = filterFactory.Create(context);
 
