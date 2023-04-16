@@ -28,11 +28,13 @@ public sealed class KestrelChannelCreator : ConnectionHandler, IChannelCreator
 
     bool IChannelCreator.Start()
     {
+        IsRunning = true;
         return true;
     }
 
     Task IChannelCreator.StopAsync()
     {
+        IsRunning = false;
         return Task.CompletedTask;
     }
 
